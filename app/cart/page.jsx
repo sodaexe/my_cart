@@ -5,10 +5,12 @@ import CartArticle from '../../components/CartArticle';
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
+  const [totalArticles, setTotalArticles] = useState(0);
 
-  // useEffect(() => {
-
-  // }, [cart]);
+  useEffect(() => {
+    console.log('Panier mis à jour :', cart.length);
+    //fetch(`api/cart/update/{cart.id}`);
+  }, [cart]);
 
   const articles = [
     {id: 1, title: 'Gourde', emoji: '🥤', price: 10},
@@ -17,6 +19,8 @@ export default function Cart() {
   ];
 
   const handleAddToCart = (article) => {
+    setTotalArticles(totalArticles + 1);
+
     const found = cart.find((item) => item.id === article.id);
     if (found) {
       setCart((prevCart) =>
@@ -65,7 +69,9 @@ export default function Cart() {
         })}
       </div>
 
-      <h2>Résultat panier (total articles : {cart.length})</h2>
+      <h2 className="text-xl font-bold">
+        Résultat panier (total articles : {totalArticles})
+      </h2>
       <div id="cart">
         {cart.map((article, idx) => (
           <CartArticle
