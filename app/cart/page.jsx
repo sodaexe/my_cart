@@ -17,9 +17,24 @@ export default function Cart() {
   ];
 
   const handleAddToCart = (article) => {
-    setCart((prevCart) => [...prevCart, article]);
-    console.log(`Article ajouté au panier: ${article.title}`);
-    console.log(cart);
+    const found = cart.find((item) => item.id === article.id);
+    if (found) {
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === article.id
+            ? {
+                title: item.title,
+                price: item.price,
+                id: item.id,
+                handleRemoveFromCart: item.handleRemoveFromCart,
+                quantity: item.quantity + 1,
+              }
+            : item
+        )
+      );
+      return;
+    }
+    setCart((prevCart) => [...prevCart, {...article, quantity: 1}]);
   };
 
   const handleRemoveFromCart = (article_index) => {
@@ -57,7 +72,7 @@ export default function Cart() {
             key={idx}
             title={article.title}
             price={article.price}
-            quantity={0}
+            quantity={article.quantity}
             handleRemoveFromCart={() => handleRemoveFromCart(idx)}
           />
         ))}
